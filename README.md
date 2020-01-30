@@ -3,7 +3,7 @@
 #### -- Project Status: Active
 
 ## Project Objective
-The purpose of this project is to build a sentiment classifier for climate change related tweets. We are also interested in studying the correlation between climate change sentiment and daily global surface temperatures. 
+The purpose of this project is to build a model that classifies the sentimet of tweets towards man-made climate change. We are also interested in studying the correlation between climate change sentiment and daily global surface temperatures. 
 
 ### Methods Used
 * Machine Learning 
@@ -20,25 +20,24 @@ The purpose of this project is to build a sentiment classifier for climate chang
 
 ## Project Description
 Data cleaning: <br>
-The labeled Kaggle dataset that we started with contained tweets with corrupted text, so we used Tweepy to access all the tweets by tweet id and retrieve the original clean text as well as additional features that could be of use. Around 30% of the tweets were no longer available, so we imputed the missing data and using natural language processing technqiues to clean the textual features. <br>
+The labeled Kaggle dataset that we started with contained tweets with corrupted text, so we used Tweepy to access all the tweets by tweet id and retrieve the original clean text as well as additional features that could be of use. Around 30% of the tweets were no longer available, so we imputed the missing data and used natural language processing techniques to clean the textual features. <br>
 
 Model fitting: <br>
-We trained Naive Bayes, Logisitic Regression, and Decision Tree models to the data for 3 class (1: supports the belief of man-made climate change, 0: neither supports nor refutes the belief of man-made climate change, -1: refutes the belief of man-made climate change) as well as a 2 class model omitting class 0 due to the ambiguity that we noticed in the content of many of the class 0 tweets. <br>
+We trained Naive Bayes, Logisitic Regression, and Decision Tree models to predict three classes:
+ - 1: supports the belief of man-made climate change
+ - 0: neither supports nor refutes the belief of man-made climate change
+ - -1: refutes the belief of man-made climate change
+ 
+We also trained a two class model omitting class 0 due to the ambiguity that we noticed in the content of many of the class 0 tweets. <br>
 
-We are currently working on improving model performace through feature selection. Our next step will be to decide on a metric of extreme daily temperature and examine its correlation with sentiment towards climate change.
-
-
-## Getting Started
-
-1. Clone this repo (for help see this [tutorial](https://help.github.com/articles/cloning-a-repository/)).
-2. Raw Data is being kept [here](https://github.com/lcoda/Twitter-Climate-Change-Sentiment-Analysis/tree/master/data) within this repo.
-3. Data processing/transformation scripts are being kept [here](Repo folder containing data processing scripts/notebooks)
+We are currently working on improving model performance through feature selection. Our next step will be to decide on a metric of extreme daily temperature and examine its correlation with sentiment towards climate change.
 
 
 ## Featured Notebooks
-* [Data Cleaning](link)
-* [Data Visualization](link)
-* [Model Fitting](link)
+
+* [Data Cleaning](https://github.com/lcoda/Twitter-Climate-Change-Sentiment-Analysis/blob/master/data_cleaning.ipynb)
+* [Exploratory Data Analysis](https://github.com/lcoda/Twitter-Climate-Change-Sentiment-Analysis/blob/master/EDA.ipynb)
+* [Model Fitting](https://github.com/lcoda/Twitter-Climate-Change-Sentiment-Analysis/blob/master/Initial%20Model%20Fitting.ipynb)
 
 
 ## Authors
