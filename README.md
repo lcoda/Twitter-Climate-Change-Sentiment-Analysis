@@ -3,7 +3,7 @@
 #### -- Project Status: Active
 
 ## Project Objective
-The purpose of this project is to build a model that classifies the sentimet of tweets towards man-made climate change. We are also interested in studying the correlation between climate change sentiment and daily global surface temperatures. 
+The purpose of this project is to build a model that classifies the sentiment of tweets towards man-made climate change. We are also interested in studying the correlation between climate change sentiment and daily global surface temperature. 
 
 ### Methods Used
 * Machine Learning 
