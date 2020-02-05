@@ -1,17 +1,23 @@
+import numpy as np
+from scipy.sparse import csr_matrix, hstack
+
+from sklearn.model_selection import KFold
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+
+
 #takes in 2 numpy arrays 
 #first array is "clean text"
 #second array is the classes 
 
-def naive_bayes(text_array, class_vector):
-    
-    from sklearn.model_selection import KFold
-    from sklearn.feature_extraction.text import CountVectorizer
-    from sklearn.naive_bayes import MultinomialNB
-    import numpy as np 
+def naive_bayes(text_array, class_vector): 
     
     
     #split data into 5 folds
-    kf = KFold(n_splits=5, random_state = 0)
+    kf = KFold(n_splits=5, random_state = 0, shuffle=True)
     fold1, fold2, fold3, fold4, fold5 = kf.split(text_array)
     folds = [fold1, fold2, fold3, fold4, fold5]
     
@@ -48,15 +54,8 @@ def naive_bayes(text_array, class_vector):
 
 def logistic(text_array, class_vector, numerical_matrix = None):
     
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import KFold
-    from sklearn.feature_extraction.text import CountVectorizer
-    from scipy.sparse import csr_matrix, hstack
-    import numpy as np
-
-    
     #split data into 5 folds
-    kf = KFold(n_splits=5, random_state = 0)
+    kf = KFold(n_splits=5, random_state = 0, shuffle=True)
     fold1, fold2, fold3, fold4, fold5 = kf.split(text_array)
     folds = [fold1, fold2, fold3, fold4, fold5]
     
@@ -90,15 +89,8 @@ def logistic(text_array, class_vector, numerical_matrix = None):
 
 def random_forest(text_array, class_vector, numerical_matrix = None):
     
-    from sklearn.ensemble import RandomForestClassifier
-    from sklearn.model_selection import KFold
-    from sklearn.feature_extraction.text import CountVectorizer
-    from scipy.sparse import csr_matrix, hstack
-    import numpy as np 
-
-    
     #split data into 5 folds
-    kf = KFold(n_splits=5)
+    kf = KFold(n_splits=5, random_state=0, shuffle=True)
     fold1, fold2, fold3, fold4, fold5 = kf.split(text_array)
     folds = [fold1, fold2, fold3, fold4, fold5]
     

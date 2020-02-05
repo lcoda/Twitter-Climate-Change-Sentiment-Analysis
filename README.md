@@ -30,7 +30,7 @@ We trained Naive Bayes, Logisitic Regression, and Decision Tree models to predic
  
 We also trained a two class model omitting class 0 due to the ambiguity that we noticed in the content of many of the class 0 tweets. <br>
 
-We are currently working on improving model performance through feature selection. Our next step will be to decide on a metric of extreme daily temperature and examine its correlation with sentiment towards climate change.
+We are currently working on improving performance through model selection which includes: algorithm selection, regularization, hyperparameter optimization, and feature selection. Our next step will be to decide on a metric of extreme daily temperature and examine its correlation with sentiment towards climate change.
 
 
 ## Featured Notebooks
