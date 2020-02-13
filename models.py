@@ -56,6 +56,7 @@ def naive_bayes(text_array, class_vector, ngram=(1,1), maxwords=None):
         #print(nb_classifier.score(test_v, test_classes))
         #print(type(nb_classifier.score(test_v, test_classes)))
         
+        # compute accuracy
         scores += [nb_classifier.score(test_v, test_classes)]
         
         # compute precision, recall, and fscore (macro-averaged)
@@ -67,7 +68,6 @@ def naive_bayes(text_array, class_vector, ngram=(1,1), maxwords=None):
         recall.append(metrics[1])
         Fscore.append(metrics[2])
     
-    # compute accuracy
     return np.mean(scores), np.mean(precision), np.mean(recall), np.mean(Fscore)
 
 
