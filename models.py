@@ -10,13 +10,24 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
 
-#takes in 2 numpy arrays 
-#first array is "clean text"
-#second array is the classes 
 
-def naive_bayes(text_array, class_vector): 
+def naive_bayes(text_array, class_vector, ngram=(1,1), maxwords=None):
+    """ 
+    5 fold cross validation for Multinomial Naive Bayes classifier. 
     
-    
+    Parameters: 
+    text_array (numpy array): cleaned text
+    class_vector (numpy array): class labels
+    ngram (tuple): n-gram range, default=(1,1)
+    maxwords (int): maximum number of words features to use, default=None
+  
+    Returns: 
+    float: Accuracy
+    float: Precision
+    float: Recall
+    float: F score
+  
+    """
     #split data into 5 folds
     kf = KFold(n_splits=5, random_state = 0, shuffle=True)
     fold1, fold2, fold3, fold4, fold5 = kf.split(text_array)
@@ -33,7 +44,7 @@ def naive_bayes(text_array, class_vector):
         test, test_classes = text_array[f[1]], class_vector[f[1]]
         
         #vectorize the features
-        vectorizer = CountVectorizer()
+        vectorizer = CountVectorizer(ngram_range=ngram, max_features=maxwords)
         train_v = vectorizer.fit_transform(train)
         test_v = vectorizer.transform(test)
         
@@ -56,17 +67,29 @@ def naive_bayes(text_array, class_vector):
         recall.append(metrics[1])
         Fscore.append(metrics[2])
     
+    # compute accuracy
     return np.mean(scores), np.mean(precision), np.mean(recall), np.mean(Fscore)
 
 
 
-#takes in 3 numpy objects 
-#first array is "clean text"
-#second array is the classes 
-#3rd argument is optional matrix of other numerical features 
-
-def logistic(text_array, class_vector, numerical_matrix = None):
+def logistic(text_array, class_vector, numerical_matrix = None, ngram=(1,1), maxwords=None):
+    """ 
+    5 fold cross validation for Logistic Regression classifier. 
     
+    Parameters: 
+    text_array (numpy array): cleaned text
+    class_vector (numpy array): class labels
+    numerical_matrix (numpy array): matrix of other numerical features, default=None
+    ngram (tuple): n-gram range, default=(1,1)
+    maxwords (int): maximum number of words features to use, default=None
+  
+    Returns: 
+    float: Accuracy
+    float: Precision
+    float: Recall
+    float: F score
+  
+    """
     #split data into 5 folds
     kf = KFold(n_splits=5, random_state = 0, shuffle=True)
     fold1, fold2, fold3, fold4, fold5 = kf.split(text_array)
@@ -83,7 +106,7 @@ def logistic(text_array, class_vector, numerical_matrix = None):
         test_text, test_classes = text_array[f[1]], class_vector[f[1]]
         
         #vectorize the features
-        vectorizer = CountVectorizer()
+        vectorizer = CountVectorizer(ngram_range=ngram, max_features=maxwords)
         train = vectorizer.fit_transform(train_text)
         test = vectorizer.transform(test_text)
         
@@ -96,6 +119,7 @@ def logistic(text_array, class_vector, numerical_matrix = None):
         logistic_classifier = LogisticRegression(random_state=0, max_iter = 2000)
         logistic_classifier.fit(train, train_classes)
         
+        # compute accuracy
         scores += [logistic_classifier.score(test, test_classes)]
         
         # compute precision, recall, and fscore (macro-averaged)
@@ -112,8 +136,24 @@ def logistic(text_array, class_vector, numerical_matrix = None):
 
 
 
-def random_forest(text_array, class_vector, numerical_matrix = None):
+def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1), maxwords=None):
+    """ 
+    5 fold cross validation for Random Forest classifier. 
     
+    Parameters: 
+    text_array (numpy array): cleaned text
+    class_vector (numpy array): class labels
+    numerical_matrix (numpy array): matrix of other numerical features, default=None
+    ngram (tuple): n-gram range, default=(1,1)
+    maxwords (int): maximum number of words features to use, default=None
+  
+    Returns: 
+    float: Accuracy
+    float: Precision
+    float: Recall
+    float: F score
+  
+    """    
     #split data into 5 folds
     kf = KFold(n_splits=5, random_state=0, shuffle=True)
     fold1, fold2, fold3, fold4, fold5 = kf.split(text_array)
@@ -130,7 +170,7 @@ def random_forest(text_array, class_vector, numerical_matrix = None):
         test_text, test_classes = text_array[f[1]], class_vector[f[1]]
         
         #vectorize the features
-        vectorizer = CountVectorizer()
+        vectorizer = CountVectorizer(ngram_range=ngram, max_features=maxwords)
         train = vectorizer.fit_transform(train_text)
         test = vectorizer.transform(test_text)
         
@@ -143,6 +183,7 @@ def random_forest(text_array, class_vector, numerical_matrix = None):
         rf_classifier = RandomForestClassifier()
         rf_classifier.fit(train, train_classes)
         
+        # compute accuracy
         scores += [rf_classifier.score(test, test_classes)]
         
         # compute precision, recall, and fscore (macro-averaged)
