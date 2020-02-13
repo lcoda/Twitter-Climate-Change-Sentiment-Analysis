@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.sparse import csr_matrix, hstack
 
+import sklearn
 from sklearn.model_selection import KFold
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -22,6 +23,9 @@ def naive_bayes(text_array, class_vector):
     folds = [fold1, fold2, fold3, fold4, fold5]
     
     scores = []
+    precision = []
+    recall = []
+    Fscore = []
     
     for f in folds:
         #split data into testing a training set 
@@ -42,8 +46,17 @@ def naive_bayes(text_array, class_vector):
         #print(type(nb_classifier.score(test_v, test_classes)))
         
         scores += [nb_classifier.score(test_v, test_classes)]
+        
+        # compute precision, recall, and fscore (macro-averaged)
+        metrics = sklearn.metrics.precision_recall_fscore_support(test_classes,
+                                                                  nb_classifier.predict(test_v),
+                                                                  average='macro',
+                                                                  zero_division=0)
+        precision.append(metrics[0])
+        recall.append(metrics[1])
+        Fscore.append(metrics[2])
     
-    return np.mean(scores)
+    return np.mean(scores), np.mean(precision), np.mean(recall), np.mean(Fscore)
 
 
 
@@ -60,6 +73,9 @@ def logistic(text_array, class_vector, numerical_matrix = None):
     folds = [fold1, fold2, fold3, fold4, fold5]
     
     scores = []
+    precision = []
+    recall = []
+    Fscore = []
     
     for f in folds:
         #split data into testing a training set 
@@ -81,8 +97,17 @@ def logistic(text_array, class_vector, numerical_matrix = None):
         logistic_classifier.fit(train, train_classes)
         
         scores += [logistic_classifier.score(test, test_classes)]
+        
+        # compute precision, recall, and fscore (macro-averaged)
+        metrics = sklearn.metrics.precision_recall_fscore_support(test_classes,
+                                                                  logistic_classifier.predict(test),
+                                                                  average='macro',
+                                                                  zero_division=0)
+        precision.append(metrics[0])
+        recall.append(metrics[1])
+        Fscore.append(metrics[2])
     
-    return np.mean(scores)
+    return np.mean(scores), np.mean(precision), np.mean(recall), np.mean(Fscore)
 
 
 
@@ -95,6 +120,9 @@ def random_forest(text_array, class_vector, numerical_matrix = None):
     folds = [fold1, fold2, fold3, fold4, fold5]
     
     scores = []
+    precision = []
+    recall = []
+    Fscore = []
     
     for f in folds:
         #split data into testing a training set 
@@ -116,8 +144,17 @@ def random_forest(text_array, class_vector, numerical_matrix = None):
         rf_classifier.fit(train, train_classes)
         
         scores += [rf_classifier.score(test, test_classes)]
+        
+        # compute precision, recall, and fscore (macro-averaged)
+        metrics = sklearn.metrics.precision_recall_fscore_support(test_classes,
+                                                                  rf_classifier.predict(test),
+                                                                  average='macro',
+                                                                  zero_division=0)
+        precision.append(metrics[0])
+        recall.append(metrics[1])
+        Fscore.append(metrics[2])
     
-    return np.mean(scores)
+    return np.mean(scores), np.mean(precision), np.mean(recall), np.mean(Fscore)
     
     
     
