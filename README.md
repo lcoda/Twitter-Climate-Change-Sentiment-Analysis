@@ -37,7 +37,7 @@ We are currently working on improving performance through model selection which 
 
 * [Data Cleaning](https://github.com/lcoda/Twitter-Climate-Change-Sentiment-Analysis/blob/master/data_cleaning.ipynb)
 * [Exploratory Data Analysis](https://github.com/lcoda/Twitter-Climate-Change-Sentiment-Analysis/blob/master/EDA.ipynb)
-* [Model Fitting](https://github.com/lcoda/Twitter-Climate-Change-Sentiment-Analysis/blob/master/Initial%20Model%20Fitting.ipynb)
+* [Model Exploration](https://github.com/lcoda/Twitter-Climate-Change-Sentiment-Analysis/blob/master/initial_model_fitting.ipynb)
 
 
 ## Authors
