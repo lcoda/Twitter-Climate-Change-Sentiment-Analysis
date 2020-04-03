@@ -138,7 +138,7 @@ def logistic(text_array, class_vector, numerical_matrix = None, ngram=(1,1), max
 
 
 
-def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1), maxwords=None, skvectorizer=CountVectorizer):
+def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1), maxwords=None, skvectorizer=CountVectorizer,param=[100,None,2,1]):
     """ 
     5 fold cross validation for Random Forest classifier. 
     
@@ -149,6 +149,7 @@ def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1)
     ngram (tuple): n-gram range, default=(1,1)
     maxwords (int): maximum number of words features to use, default=None
     skvectorizer (sklearn.feature_extraction.text): vectorizer to use, default=CountVectorizer
+    param (list): parameters for RandomForestClassifier() [n_estimators, max_depth, min_samples_split, min_samples_leaf], default = [100,None,2,1]
   
     Returns: 
     float: Accuracy
@@ -183,7 +184,8 @@ def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1)
             test = hstack([test, csr_matrix(numerical_matrix[f[1]])])
         
         #run logistic regression
-        rf_classifier = RandomForestClassifier()
+        rf_classifier = RandomForestClassifier(n_estimators=param[0], max_depth=param[1],
+                                               min_samples_split=param[2],min_samples_leaf=param[3])
         rf_classifier.fit(train, train_classes)
         
         # compute accuracy
@@ -199,6 +201,30 @@ def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1)
         Fscore.append(metrics[2])
     
     return np.mean(scores), np.mean(precision), np.mean(recall), np.mean(Fscore)
+
+
+
+def k_cross_val(classifier,X,y,k=5):
+    accuracy = []
+    precision = []
+    recall = []
+    Fscore = []
+    kf = KFold(n_splits=k, random_state=0, shuffle=True)
+    for train_i, test_i in kf.split(X):
+        x_vtrain, x_vtest = X[train_i], X[test_i]
+        y_vtrain, y_vtest = y[train_i], y[test_i]
+        classifier.fit(x_vtrain, y_vtrain)
+        
+        accuracy.append(classifier.score(x_vtest, y_vtest))
+        metrics = sklearn.metrics.precision_recall_fscore_support(y_vtest,
+                                                                  classifier.predict(x_vtest),
+                                                                  average='macro',
+                                                                  zero_division=0)
+        precision.append(metrics[0])
+        recall.append(metrics[1])
+        Fscore.append(metrics[2])
+    
+    return np.mean(accuracy), np.mean(precision), np.mean(recall), np.mean(Fscore)
     
     
     
