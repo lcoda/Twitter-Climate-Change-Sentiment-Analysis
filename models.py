@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 
-def naive_bayes(text_array, class_vector, ngram=(1,1), maxwords=None):
+def naive_bayes(text_array, class_vector, ngram=(1,1), maxwords=None,skvectorizer=CountVectorizer):
     """ 
     5 fold cross validation for Multinomial Naive Bayes classifier. 
     
@@ -20,6 +20,7 @@ def naive_bayes(text_array, class_vector, ngram=(1,1), maxwords=None):
     class_vector (numpy array): class labels
     ngram (tuple): n-gram range, default=(1,1)
     maxwords (int): maximum number of words features to use, default=None
+    skvectorizer (sklearn.feature_extraction.text): vectorizer to use, default=CountVectorizer
   
     Returns: 
     float: Accuracy
@@ -44,7 +45,7 @@ def naive_bayes(text_array, class_vector, ngram=(1,1), maxwords=None):
         test, test_classes = text_array[f[1]], class_vector[f[1]]
         
         #vectorize the features
-        vectorizer = CountVectorizer(ngram_range=ngram, max_features=maxwords)
+        vectorizer = skvectorizer(ngram_range=ngram, max_features=maxwords)
         train_v = vectorizer.fit_transform(train)
         test_v = vectorizer.transform(test)
         
@@ -72,7 +73,7 @@ def naive_bayes(text_array, class_vector, ngram=(1,1), maxwords=None):
 
 
 
-def logistic(text_array, class_vector, numerical_matrix = None, ngram=(1,1), maxwords=None):
+def logistic(text_array, class_vector, numerical_matrix = None, ngram=(1,1), maxwords=None,skvectorizer=CountVectorizer):
     """ 
     5 fold cross validation for Logistic Regression classifier. 
     
@@ -82,6 +83,7 @@ def logistic(text_array, class_vector, numerical_matrix = None, ngram=(1,1), max
     numerical_matrix (numpy array): matrix of other numerical features, default=None
     ngram (tuple): n-gram range, default=(1,1)
     maxwords (int): maximum number of words features to use, default=None
+    skvectorizer (sklearn.feature_extraction.text): vectorizer to use, default=CountVectorizer
   
     Returns: 
     float: Accuracy
@@ -106,7 +108,7 @@ def logistic(text_array, class_vector, numerical_matrix = None, ngram=(1,1), max
         test_text, test_classes = text_array[f[1]], class_vector[f[1]]
         
         #vectorize the features
-        vectorizer = CountVectorizer(ngram_range=ngram, max_features=maxwords)
+        vectorizer = skvectorizer(ngram_range=ngram, max_features=maxwords)
         train = vectorizer.fit_transform(train_text)
         test = vectorizer.transform(test_text)
         
@@ -136,7 +138,7 @@ def logistic(text_array, class_vector, numerical_matrix = None, ngram=(1,1), max
 
 
 
-def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1), maxwords=None):
+def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1), maxwords=None, skvectorizer=CountVectorizer,param=[100,None,2,1]):
     """ 
     5 fold cross validation for Random Forest classifier. 
     
@@ -146,6 +148,8 @@ def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1)
     numerical_matrix (numpy array): matrix of other numerical features, default=None
     ngram (tuple): n-gram range, default=(1,1)
     maxwords (int): maximum number of words features to use, default=None
+    skvectorizer (sklearn.feature_extraction.text): vectorizer to use, default=CountVectorizer
+    param (list): parameters for RandomForestClassifier() [n_estimators, max_depth, min_samples_split, min_samples_leaf], default = [100,None,2,1]
   
     Returns: 
     float: Accuracy
@@ -170,7 +174,7 @@ def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1)
         test_text, test_classes = text_array[f[1]], class_vector[f[1]]
         
         #vectorize the features
-        vectorizer = CountVectorizer(ngram_range=ngram, max_features=maxwords)
+        vectorizer = skvectorizer(ngram_range=ngram, max_features=maxwords)
         train = vectorizer.fit_transform(train_text)
         test = vectorizer.transform(test_text)
         
@@ -180,7 +184,8 @@ def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1)
             test = hstack([test, csr_matrix(numerical_matrix[f[1]])])
         
         #run logistic regression
-        rf_classifier = RandomForestClassifier()
+        rf_classifier = RandomForestClassifier(n_estimators=param[0], max_depth=param[1],
+                                               min_samples_split=param[2],min_samples_leaf=param[3])
         rf_classifier.fit(train, train_classes)
         
         # compute accuracy
@@ -196,6 +201,30 @@ def random_forest(text_array, class_vector, numerical_matrix = None, ngram=(1,1)
         Fscore.append(metrics[2])
     
     return np.mean(scores), np.mean(precision), np.mean(recall), np.mean(Fscore)
+
+
+
+def k_cross_val(classifier,X,y,k=5):
+    accuracy = []
+    precision = []
+    recall = []
+    Fscore = []
+    kf = KFold(n_splits=k, random_state=0, shuffle=True)
+    for train_i, test_i in kf.split(X):
+        x_vtrain, x_vtest = X[train_i], X[test_i]
+        y_vtrain, y_vtest = y[train_i], y[test_i]
+        classifier.fit(x_vtrain, y_vtrain)
+        
+        accuracy.append(classifier.score(x_vtest, y_vtest))
+        metrics = sklearn.metrics.precision_recall_fscore_support(y_vtest,
+                                                                  classifier.predict(x_vtest),
+                                                                  average='macro',
+                                                                  zero_division=0)
+        precision.append(metrics[0])
+        recall.append(metrics[1])
+        Fscore.append(metrics[2])
+    
+    return np.mean(accuracy), np.mean(precision), np.mean(recall), np.mean(Fscore)
     
     
     
