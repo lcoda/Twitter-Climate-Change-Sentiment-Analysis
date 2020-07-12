@@ -1,0 +1,90 @@
+Title: Metadata for raw data
+
+Description: Twitter data from tweets on man-made climate change from 2015 - 2018. Original data
+ and sentiment labels downloaded from Kaggle (https://www.kaggle.com/edqian/twitter-climate-change-sentiment-dataset). 
+Other features were then scraped from Twitter (Last updated January 9, 2020). 
+
+Columns: 
+1: 'sentiment'  
+2: 'message' 
+3: 'tweetid' 
+4: 'text'
+5: 'is_retweet'
+6: 'is_quoted'
+7: 'quoted_text' 
+8: 'date_time'
+9: 'retweets'
+10: 'favorites' 
+11: 'hashtags' 
+12: 'followers'
+13: 'verified'
+14: 'location'
+15: 'language' 
+16: 'character_count'
+17: 'mention_count'
+18: 'mentions'
+19: 'capital_words'
+20: 'url_count'
+21: 'emojis' 
+
+
+Column Descriptions (data type; text description):
+1: int; sentiment (as labeled in the original Kaggle dataset)
+		2 = the tweet links to factual news about climate change
+		1 = the tweet expresses belief of man-made climate change
+		0 = the tweet neither supports nor refutes the belief of man-made climate change
+		-1 = the tweet expresses disbelief in man-made climate change
+2: str; text of tweet as it appears in the original Kaggle dataset
+3: int; identification number of the tweet 
+4: str; text of the tweet as it appears on Twitter
+5: bool; True = tweet is a retweet
+6: bool; True = tweet quotes another tweet
+7: str; text of tweet the original tweet references
+8: str; date and time of the tweet
+9: int; count of times the tweet has been retweets
+10: int; count of times the tweet has been favorited 
+11: list; each entry in the list is a dictionary containing the text of each 
+	hashtag in the tweet and the location of the hashtag in the tweet
+12: int; follower count of the user
+13: boolean; True = user is a verified account
+14: str; location as listed in the user's bio
+15: str; language of the original tweet
+	en= English
+	in = Indonesian
+	tl = Filipino
+	fr = French
+	it = Italian
+	es = Spanish
+	pt = Portuguese
+	sv = Swedish
+       	ja = Japanese
+	da = Danish
+	nl = Dutch
+	hi = Hindi
+	ro = Romanian
+	de = German
+	th = Thai
+	no = Norwegian
+	ta = Tamil
+	ar = Arabic
+	pl = Polish
+	ru = Russian
+	zh = Chinese
+	ur = Urdu
+	fi = Finnish
+	tr = Turkish
+	und = undetermined
+	n = no data, tweet no longer available
+16: int; count of characters appearing in the tweet
+17: int; count of mentions appearing the tweet
+18: list; list of the mentions in the tweet
+19: list; list of words in all capital letters in the tweet
+20: int; count of urls referenced in the tweet
+21: list; list of unicode emojis used in the tweet 
+
+Missing Data Notes:
+'n' indicates a null value in non-integer type columns
+-999 indicates a null value in integer type columns
+
+
+
