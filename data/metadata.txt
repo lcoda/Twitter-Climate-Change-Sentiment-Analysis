@@ -82,9 +82,6 @@ Column Descriptions (data type; text description):
 20: int; count of urls referenced in the tweet
 21: list; list of unicode emojis used in the tweet 
 
-Missing Data Notes:
-'n' indicates a null value in non-integer type columns
--999 indicates a null value in integer type columns
 
 
 
